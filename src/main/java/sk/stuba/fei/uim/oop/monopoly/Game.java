@@ -5,12 +5,14 @@ import java.util.Scanner;
 
 public class Game {
 
-    public static void main (String[] args){
+    public static void monopolyGame(){
         Console console = System.console();
         if (console != null){
             console.writer().println("<<<<<<<<<<<<<<<<MONOPOLY LITE>>>>>>>>>>>>>>>>");
             console.writer().println("version 1.0");
-            console.writer().println("Choose your names...");
+            console.writer().println("how many nolifers want to play this amazing java console game?");
+            int player_count =  Integer.parseInt(console.readLine());
+            System.out.println("looserov je" + player_count);
 
             System.out.println("Player 1:");
             String player_1 = console.readLine();
