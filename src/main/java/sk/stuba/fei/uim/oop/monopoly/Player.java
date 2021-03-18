@@ -3,7 +3,9 @@ package sk.stuba.fei.uim.oop.monopoly;
 public class Player {
     String name = "";
     private int balance = 15000;
-    boolean defeatStatus = false;
+    public boolean defeatStatus = false;
+    public int position = 0;
+
 
     public String getName() {
         return name;
@@ -21,13 +23,15 @@ public class Player {
         this.balance = newBalance;
     }
 
-    public boolean getDefeatStatus() {
+    public boolean isDefeatStatus() {
         return defeatStatus;
     }
 
-    public void setDefeatStatus(boolean newDefeatStatus) {
-        this.defeatStatus = newDefeatStatus;
+    public void setDefeatStatus(boolean defeatStatus) {
+        this.defeatStatus = defeatStatus;
     }
-}
+
+
+
 
 
