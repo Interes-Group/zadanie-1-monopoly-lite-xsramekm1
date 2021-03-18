@@ -1,7 +1,6 @@
 package sk.stuba.fei.uim.oop.monopoly;
 
 public class Estate extends Square{
-    String name;
     int retail_price;
     int visit_price;
     boolean purchased = false;

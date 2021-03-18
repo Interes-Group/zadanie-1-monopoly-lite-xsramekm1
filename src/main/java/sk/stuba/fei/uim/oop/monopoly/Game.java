@@ -49,7 +49,7 @@ public class Game {
                             int roll = diceRoll();
                             players[j%player_count].setPosition(players[j%player_count].getPosition() + roll);
                             System.out.println((players[j%player_count].getName()) + " rolled the dice for: " + roll +
-                                    " and is now square: " + players[j%player_count].getPosition()%24);
+                                    " and is now square: " + players[j%player_count].getPosition()%24 + " aka " + squares[players[j%player_count].getPosition()%24]);
                             while(players[j%player_count].getPosition() >= 24){
                                 System.out.println(":::::::::::   " + players[j%player_count].getName() + " crossed the starting line and is awarded 2000 euros   :::::::::::");
                                 players[j%player_count].addBalance(2000);
@@ -111,7 +111,7 @@ public class Game {
         for (int i = 0; i < number_of_players; i++){
             if (p[i].getBalance() < 0 && p[i].getDefeatStatus() == false){
                 // If we have 0 euros we can still play
-                System.out.println(":::::::::::   " + p[i].getName() + " sa dostal do minusu " + p[i].getBalance() + " a vypadáva z hry   :::::::::::");
+                System.out.println(":::::::::::   " + p[i].getName() + " has bankrupted " + p[i].getBalance() + " and is out of the game   :::::::::::");
                 p[i].setDefeatStatus(true);
                 flag++;
                 if (flag >= number_of_players - 1){
