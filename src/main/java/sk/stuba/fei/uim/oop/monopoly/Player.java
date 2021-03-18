@@ -23,13 +23,26 @@ public class Player {
         this.balance = newBalance;
     }
 
-    public boolean isDefeatStatus() {
+    public void addBalance(int addBalance) {
+        this.balance += addBalance;
+    }
+
+    public boolean getDefeatStatus() {
         return defeatStatus;
     }
 
     public void setDefeatStatus(boolean defeatStatus) {
         this.defeatStatus = defeatStatus;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+}
 
 
 
