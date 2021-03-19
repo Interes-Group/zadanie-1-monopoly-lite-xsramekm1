@@ -1,4 +1,5 @@
 package sk.stuba.fei.uim.oop.monopoly;
 
-public class Police {
+public class Police extends Square {
+
 }

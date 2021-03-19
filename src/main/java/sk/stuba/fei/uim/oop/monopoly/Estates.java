@@ -1,34 +1,37 @@
 package sk.stuba.fei.uim.oop.monopoly;
 
 public class Estates {
-    public static void generateEstates(){
-        //Estate[] fields = new Estate[20];
-        Square[] fields = new Square[24];
-        fields[1] = new Estate();
-        fields[2] = new Estate();
-        fields[3] = new Estate();
-        fields[4] = new Estate();
-        fields[5] = new Estate();
+    public static Square[] generateEstates(){
 
-        fields[7] = new Estate();
-        fields[8] = new Estate();
-        fields[9] = new Estate();
-        fields[10] = new Estate();
-        fields[11] = new Estate();
+        Square[] fields = {
+                new Square(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(), //5
 
-        fields[13] = new Estate();
-        fields[14] = new Estate();
-        fields[15] = new Estate();
-        fields[16] = new Estate();
-        fields[17] = new Estate();
+                new Police(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Jail(),  //12
 
-        fields[19] = new Estate();
-        fields[20] = new Estate();
-        fields[21] = new Estate();
-        fields[22] = new Estate();
-        fields[23] = new Estate();
-        fields[23].setRetail_price(400);
-        fields[23].setVisit_price(80);
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Chance(), //18
+
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(),
+                new Estate(), //23
+        };
 
 
         int x = 0;
@@ -41,28 +44,34 @@ public class Estates {
             fields[x].setVisit_price(x*80);
             x++;
         }
-        fields[0].setName("Hrdzavá vaňa na záhrade");
-        fields[1].setName("Betónová skruža");
-        fields[2].setName("Drevená kadibúdka");
-        fields[3].setName("Zatuchnutá pivnica");
-        fields[4].setName("Deravá hamaka");
-        fields[5].setName("Psia búda");
-        fields[6].setName("Starý favorit");
-        fields[7].setName("Hodinový motel");
-        fields[8].setName("Garzónka v pentagone");
-        fields[9].setName("Villa v Prievidzi");
-        fields[10].setName("Uránová baňa");
-        fields[11].setName("Aljašké igloo");
-        fields[12].setName("Compton drug house");
-        fields[13].setName("Beduinsky stan");
-        fields[14].setName("Ropná plošina");
-        fields[15].setName("Rumunské ocelárne");
-        fields[16].setName("Bel Air bungalov");
-        fields[17].setName("Koloseum");
-        fields[18].setName("Burj Khalifa");
-        fields[19].setName("Pyramída v Gize");
+        fields[1].setName("Hrdzavá vaňa na záhrade");
+        fields[2].setName("Betónová skruža");
+        fields[3].setName("Drevená kadibúdka");
+        fields[4].setName("Zatuchnutá pivnica");
+        fields[5].setName("Deravá hamaka");
+        fields[7].setName("Psia búda");
+        fields[8].setName("Starý favorit");
+        fields[9].setName("Hodinový motel");
+        fields[10].setName("Garzónka v pentagone");
+        fields[11].setName("Villa v Prievidzi");
+        fields[13].setName("Uránová baňa");
+        fields[14].setName("Aljašké igloo");
+        fields[15].setName("Compton drug house");
+        fields[16].setName("Beduinsky stan");
+        fields[17].setName("Ropná plošina");
+        fields[19].setName("Rumunské ocelárne");
+        fields[20].setName("Bel Air bungalov");
+        fields[21].setName("Koloseum");
+        fields[22].setName("Burj Khalifa");
+        fields[23].setName("Pyramída v Gize");
 
+        fields[0].setName("Start");
+        fields[6].setName("Los Santos Police Department");
+        fields[12].setName("Supermax prison");
+        fields[18].setName("Chance");
+
+
+        return fields;
     }
-
 }
 

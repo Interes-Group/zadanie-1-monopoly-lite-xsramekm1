@@ -13,4 +13,11 @@ public class Dice {
         while (rand_int % 6 == 0);
         return rand_int;
     }
+
+    public static int prisonRoll(){
+        Random rand = new Random();
+        int rand_int =  rand.nextInt(2);
+        rand_int += 1;
+        return rand_int;
+    }
 }

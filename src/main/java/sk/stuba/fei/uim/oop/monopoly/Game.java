@@ -2,14 +2,17 @@ package sk.stuba.fei.uim.oop.monopoly;
 
 import java.io.Console;
 import java.util.Scanner;
+import sk.stuba.fei.uim.oop.monopoly.Estates;
 
 import static sk.stuba.fei.uim.oop.monopoly.Dice.diceRoll;
+import static sk.stuba.fei.uim.oop.monopoly.Dice.prisonRoll;
 
 public class Game {
 
     public static void monopolyGame(){
         Console console = System.console();
         if (console == null){
+            Square[] fields = Estates.generateEstates();
             System.out.println("<<<<<<<<<<<<<<<<MONOPOLY LITE>>>>>>>>>>>>>>>>");
             System.out.println("version 1.0");
             System.out.println("how many nolifers want to play this amazing java console game?");
@@ -25,7 +28,7 @@ public class Game {
                 System.out.println("neplatny pocet hracov");
             } else {
                 System.out.println("looserov je " + player_count);
-
+                System.out.println(Jail.testovac());
                 Player[] players = new Player[player_count];
                 for (int i = 0; i < player_count; i++){
                     System.out.println("Player " + (i+1) + " choose your name:");
@@ -49,12 +52,21 @@ public class Game {
                             int roll = diceRoll();
                             players[j%player_count].setPosition(players[j%player_count].getPosition() + roll);
                             System.out.println((players[j%player_count].getName()) + " rolled the dice for: " + roll +
-                                    " and is now square: " + players[j%player_count].getPosition()%24 + " aka " + squares[players[j%player_count].getPosition()%24]);
+                                    " and is now square: " + players[j%player_count].getPosition()%24 + " aka " + fields[players[j%player_count].getPosition()%24].getName());
+                            if (players[j%player_count].getPosition() == 12){
+                                System.out.println("You are visiting maximum security prison so take a good look... and maybe reserve one of the rooms");
+                            }
                             while(players[j%player_count].getPosition() >= 24){
                                 System.out.println(":::::::::::   " + players[j%player_count].getName() + " crossed the starting line and is awarded 2000 euros   :::::::::::");
                                 players[j%player_count].addBalance(2000);
                                 players[j%player_count].setPosition(players[j%player_count].getPosition()-24);
                             }
+                            if (players[j%player_count].getPosition() == 6){
+                                int prison_turn = prisonRoll();
+                                System.out.println("You have been caught by special taskforce known as pedohunters and you are going to prison for " + prison_turn + " turn(s)");
+
+                            }
+
                             j++;
                             continue;
                         case "b":
