@@ -39,9 +39,8 @@ public class Estates {
             if(i == 6 || i == 12 || i == 18){
                 continue;
             }
-            fields[x].setId(i);
-            fields[x].setRetail_price(x*400);
-            fields[x].setVisit_price(x*80);
+            fields[i].setRetail_price(x*400);
+            fields[i].setVisit_price(x*80);
             x++;
         }
         fields[1].setName("Hrdzavá vaňa na záhrade");

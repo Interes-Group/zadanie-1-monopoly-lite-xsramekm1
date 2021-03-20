@@ -28,7 +28,6 @@ public class Game {
                 System.out.println("neplatny pocet hracov");
             } else {
                 System.out.println("looserov je " + player_count);
-                System.out.println(Jail.testovac());
                 Player[] players = new Player[player_count];
                 for (int i = 0; i < player_count; i++){
                     System.out.println("Player " + (i+1) + " choose your name:");
@@ -45,63 +44,87 @@ public class Game {
                 System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help   ::::♠♣♥♦::::");
                 int j = 0;
                 while(gameOver(player_count, players) == false){
-                    String input_command;
-                    input_command = scan.nextLine();
-                    switch (input_command){
-                        case "s":
-                            int roll = diceRoll();
-                            players[j%player_count].setPosition(players[j%player_count].getPosition() + roll);
-                            System.out.println((players[j%player_count].getName()) + " rolled the dice for: " + roll +
-                                    " and is now square: " + players[j%player_count].getPosition()%24 + " aka " + fields[players[j%player_count].getPosition()%24].getName());
-                            if (players[j%player_count].getPosition() == 12){
-                                System.out.println("You are visiting maximum security prison so take a good look... and maybe reserve one of the rooms");
-                            }
-                            while(players[j%player_count].getPosition() >= 24){
-                                System.out.println(":::::::::::   " + players[j%player_count].getName() + " crossed the starting line and is awarded 2000 euros   :::::::::::");
-                                players[j%player_count].addBalance(2000);
-                                players[j%player_count].setPosition(players[j%player_count].getPosition()-24);
-                            }
-                            if (players[j%player_count].getPosition() == 6){
-                                int prison_turn = prisonRoll();
-                                System.out.println("You have been caught by special taskforce known as pedohunters and you are going to prison for " + prison_turn + " turn(s)");
 
-                            }
-
+                    int roll = diceRoll();
+                    if (players[j%player_count].getPosition() == 6){
+                        if (players[j%player_count].getJail_time() > 0){
+                            System.out.println(players[j%player_count].getName() + " is in jail for " + players[j%player_count].getJail_time() +  " more turn(s)");
+                            players[j%player_count].reduceJail_time();
                             j++;
                             continue;
-                        case "b":
-                            //buy command
-                            continue;
-                        case "e":
-                            System.out.println("Your balance is: "+players[j%player_count].getBalance()+" €");
-                            continue;
-                        case "h":
-                            System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help   ::::♠♣♥♦::::");
-                            continue;
-                        case "f":
-                            //forfeit
-                            //continue;
-
+                        } else {
+                            System.out.println(players[j%player_count].getName() + " is finally free, fuck the popo! GET THE DOPE!");
+                            players[j%player_count].setPosition(12);
+                        }
                     }
-                    if(input_command != "s" && input_command != "b" && input_command != "e" && input_command != "h" && input_command != "f"){
-                        System.out.println(input_command + " is not recognizable command. Available commands are: s - skip , b - buy, e - euro balance,f - forfeit, h-help");
+                    players[j%player_count].setPosition(players[j%player_count].getPosition() + roll);
+                    System.out.println((players[j%player_count].getName()) + " rolled the dice for: " + roll +
+                            " and is now square: " + players[j%player_count].getPosition()%24 +
+                            " aka " + fields[players[j%player_count].getPosition()%24].getName() +
+                            " (retail price: " + fields[players[j%player_count].getPosition()%24].getRetail_price() + ")");
+                    if (players[j%player_count].getPosition() == 12){
+                        System.out.println("You are visiting maximum security prison so take a good look... and maybe reserve one of the rooms");
+                    }
+                    while(players[j%player_count].getPosition() >= 24){
+                        System.out.println(":::::::::::   " + players[j%player_count].getName() + " crossed the starting line and is awarded 2000 euros   :::::::::::");
+                        players[j%player_count].addBalance(2000);
+                        players[j%player_count].setPosition(players[j%player_count].getPosition()-24);
+                    }
+                    if (fields[players[j%player_count].getPosition()].isPurchased()){
+                        System.out.println("This property is owned by " + fields[players[j%player_count].getPosition()].getOwner() +
+                                ". You are paying " + fields[players[j%player_count].getPosition()].getVisit_price() + "€ for the visit.");
+                        players[fields[players[j%player_count].getPosition()].getOwner_id()].addBalance(fields[players[j%player_count].getPosition()].getVisit_price());
+                        players[j%player_count].reduceBalance(fields[players[j%player_count].getPosition()].getVisit_price());
+                    }
+                    if (players[j%player_count].getPosition() == 6){
+                        int prison_turn = prisonRoll();
+                        System.out.println("You have been caught by special taskforce known as pedohunters and you are going to prison for " + prison_turn + " turn(s)");
+                        players[j%player_count].setJail_time(prison_turn);
                     }
 
+                   input_loop: while(true){
+                        String input_command = scan.nextLine();
+                        switch (input_command){
+                            case "s":
+                                j++;
+                                break input_loop;
+                            case "b":
+                                //buy command
 
-                    // co sa nachadza na policku, co by hrac rad urobil
-                    j++;
-
-
-
-
-                    //test kod
-                    if (j > 40){
-                        System.out.println(players[0].getName() + "ma zostatok" + players[0].getBalance());
-                        players[0].setBalance(15000 - j*300);
-                        System.out.println(players[0].getName() + "ma zostatok" + players[0].getBalance());
-                    }
-                    if (j > 80){
-                        break;
+                                int pos = players[j%player_count].getPosition();
+                                //porovnanie ci je policko kupitelne
+                                if(fields[pos].getClass() == fields[1].getClass()){
+                                    if (fields[pos].isPurchased() == false){
+                                        if (fields[pos].getRetail_price() <= players[j%player_count].getBalance()){
+                                            fields[pos].setOwner_id(j%player_count);
+                                            fields[pos].setOwner(players[j%player_count].getName());
+                                            fields[pos].setPurchased(true);
+                                            players[j%player_count].reduceBalance(fields[pos].getRetail_price());
+                                            System.out.println(players[j%player_count].getName() + " has purchased " + fields[pos].getName() + " for " + fields[pos].getRetail_price() + "€");
+                                            continue;
+                                        } else{
+                                            System.out.println("You dont have enough money to buy " + fields[pos].getName());
+                                        }
+                                    } else {
+                                        System.out.println(fields[pos].getName() + " cannot be purchased because its already owned by " + fields[pos].getOwner());
+                                    }
+                                } else{
+                                    System.out.println(fields[pos].getName() + " cannot be bought");
+                                }
+                                continue;
+                            case "e":
+                                System.out.println("Your balance is: "+players[j%player_count].getBalance()+" €");
+                                continue;
+                            case "h":
+                                System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help   ::::♠♣♥♦::::");
+                                continue;
+                            case "f":
+                                //forfeit
+                                continue;
+                        }
+                        if(input_command != "s" && input_command != "b" && input_command != "e" && input_command != "h" && input_command != "f"){
+                            System.out.println(input_command + " is not recognizable command. Available commands are: s - skip , b - buy, e - euro balance,f - forfeit, h-help");
+                        }
                     }
                 }
                 for(int i = 0; i < player_count; i++){

@@ -5,7 +5,15 @@ public class Player {
     private int balance = 15000;
     public boolean defeatStatus = false;
     public int position = 0;
+    private int jail_time = 0;
 
+    public int getJail_time() {
+        return jail_time;
+    }
+
+    public void setJail_time(int jail_time) {
+        this.jail_time = jail_time;
+    }
 
     public String getName() {
         return name;
@@ -41,6 +49,14 @@ public class Player {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void reduceJail_time() {
+        this.jail_time -= jail_time;
+    }
+
+    public void reduceBalance(int amount) {
+        this.balance -= amount;
     }
 }
 
