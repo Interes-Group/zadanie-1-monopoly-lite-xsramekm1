@@ -4,8 +4,17 @@ public class Player {
     String name = "";
     private int balance = 15000;
     public boolean defeatStatus = false;
+    public boolean chanceStatus = false;
     public int position = 0;
     private int jail_time = 0;
+
+    public boolean getChanceStatus() {
+        return chanceStatus;
+    }
+
+    public void setChanceStatus(boolean chanceStatus) {
+        this.chanceStatus = chanceStatus;
+    }
 
     public int getJail_time() {
         return jail_time;

@@ -9,7 +9,8 @@ public class Square {
     int visit_price;
     boolean purchased = false;
     String owner;
-    int owner_id;
+    // ked nebolo pridelene default bol 0 (co je player cislo 1)
+    int owner_id = 780;
 
     //Police
 

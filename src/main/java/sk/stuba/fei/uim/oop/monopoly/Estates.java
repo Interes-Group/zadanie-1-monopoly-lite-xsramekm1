@@ -54,7 +54,7 @@ public class Estates {
         fields[10].setName("Garzónka v pentagone");
         fields[11].setName("Villa v Prievidzi");
         fields[13].setName("Uránová baňa");
-        fields[14].setName("Aljašké igloo");
+        fields[14].setName("Aljašské igloo");
         fields[15].setName("Compton drug house");
         fields[16].setName("Beduinsky stan");
         fields[17].setName("Ropná plošina");

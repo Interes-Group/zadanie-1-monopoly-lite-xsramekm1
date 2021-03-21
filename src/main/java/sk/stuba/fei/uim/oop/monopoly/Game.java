@@ -2,12 +2,15 @@ package sk.stuba.fei.uim.oop.monopoly;
 
 import java.io.Console;
 import java.util.Scanner;
-import sk.stuba.fei.uim.oop.monopoly.Estates;
 
+
+import static sk.stuba.fei.uim.oop.monopoly.Chance.chanceStep;
 import static sk.stuba.fei.uim.oop.monopoly.Dice.diceRoll;
 import static sk.stuba.fei.uim.oop.monopoly.Dice.prisonRoll;
 
 public class Game {
+
+    static int flag = 0;
 
     public static void monopolyGame(){
         Console console = System.console();
@@ -41,12 +44,15 @@ public class Game {
                     System.out.println(players[i].getName());
                 }
                 System.out.println("LET THE GAME BEGIN!!");
-                System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help   ::::♠♣♥♦::::");
+                System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help, p - properties  ::::♠♣♥♦::::");
                 int j = 0;
-                while(gameOver(player_count, players) == false){
-
+                while(!gameOver(player_count, players)){
+                    if(players[j%player_count].getDefeatStatus()){
+                        j++;
+                        continue;
+                    }
                     int roll = diceRoll();
-                    if (players[j%player_count].getPosition() == 6){
+                    if (players[j%player_count].getPosition() == 6 || (players[j%player_count].getPosition() == 12 && players[j%player_count].getJail_time() > 0)){
                         if (players[j%player_count].getJail_time() > 0){
                             System.out.println(players[j%player_count].getName() + " is in jail for " + players[j%player_count].getJail_time() +  " more turn(s)");
                             players[j%player_count].reduceJail_time();
@@ -62,19 +68,34 @@ public class Game {
                             " and is now square: " + players[j%player_count].getPosition()%24 +
                             " aka " + fields[players[j%player_count].getPosition()%24].getName() +
                             " (retail price: " + fields[players[j%player_count].getPosition()%24].getRetail_price() + ")");
-                    if (players[j%player_count].getPosition() == 12){
+                    if (players[j%player_count].getPosition() == 12 && players[j%player_count].getJail_time() <= 0){
                         System.out.println("You are visiting maximum security prison so take a good look... and maybe reserve one of the rooms");
                     }
+
                     while(players[j%player_count].getPosition() >= 24){
                         System.out.println(":::::::::::   " + players[j%player_count].getName() + " crossed the starting line and is awarded 2000 euros   :::::::::::");
                         players[j%player_count].addBalance(2000);
                         players[j%player_count].setPosition(players[j%player_count].getPosition()-24);
                     }
+                    if (players[j%player_count].getPosition() == 18){ //!players[j%player_count].getChanceStatus()
+                        chanceStep(players,j%player_count,fields);
+                        //players[j%player_count].setChanceStatus(true);
+                    }
                     if (fields[players[j%player_count].getPosition()].isPurchased()){
-                        System.out.println("This property is owned by " + fields[players[j%player_count].getPosition()].getOwner() +
-                                ". You are paying " + fields[players[j%player_count].getPosition()].getVisit_price() + "€ for the visit.");
-                        players[fields[players[j%player_count].getPosition()].getOwner_id()].addBalance(fields[players[j%player_count].getPosition()].getVisit_price());
-                        players[j%player_count].reduceBalance(fields[players[j%player_count].getPosition()].getVisit_price());
+                        if(fields[players[j%player_count].getPosition()].getOwner_id() != j%player_count){
+                            System.out.println("This property is owned by " + fields[players[j%player_count].getPosition()].getOwner() +
+                                    ". You are paying " + fields[players[j%player_count].getPosition()].getVisit_price() + "€ for the visit.");
+                            if (fields[players[j%player_count].getPosition()].getVisit_price() <= players[j%player_count].getBalance()){
+                                players[fields[players[j%player_count].getPosition()].getOwner_id()].addBalance(fields[players[j%player_count].getPosition()].getVisit_price());
+                                players[j%player_count].reduceBalance(fields[players[j%player_count].getPosition()].getVisit_price());
+                            } else {
+                                System.out.println("You didnt have enough balance to pay for this stay and are now bankrupted");
+                                players[fields[players[j%player_count].getPosition()].getOwner_id()].addBalance(players[j%player_count].getBalance());
+                                players[j%player_count].setBalance(-1);
+                            }
+                        } else {
+                            System.out.println("You are standing on your own property");
+                        }
                     }
                     if (players[j%player_count].getPosition() == 6){
                         int prison_turn = prisonRoll();
@@ -116,14 +137,33 @@ public class Game {
                                 System.out.println("Your balance is: "+players[j%player_count].getBalance()+" €");
                                 continue;
                             case "h":
-                                System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help   ::::♠♣♥♦::::");
+                                System.out.println("::::♠♣♥♦::::  game commands: s - skip , b - buy, e - euro balance,f - forfeit, h-help, p - properties  ::::♠♣♥♦::::");
                                 continue;
                             case "f":
                                 //forfeit
+                                System.out.println("Are you sure you want to surrender? y/n");
+                                input_command = scan.nextLine();
+                                if (input_command == "y"){
+                                    players[j%player_count].setDefeatStatus(true);
+                                    flag++;
+                                    System.out.println("Player " + players[j%player_count].getName() + " surrendered and is out of the game");
+                                }
+                                if (input_command == "n"){
+                                    System.out.println("You didnt surrender");
+                                }
                                 continue;
+                            case "p":
+                                System.out.println("Your estates:");
+                                for(int i = 0; i < 24; i++){
+                                    if (fields[i].getOwner_id() == j%player_count){
+                                        System.out.println(fields[i].getName());
+                                    }
+                                }
+                                continue;
+
                         }
                         if(input_command != "s" && input_command != "b" && input_command != "e" && input_command != "h" && input_command != "f"){
-                            System.out.println(input_command + " is not recognizable command. Available commands are: s - skip , b - buy, e - euro balance,f - forfeit, h-help");
+                            System.out.println(input_command + " is not recognizable command. Available commands are: s - skip , b - buy, e - euro balance,f - forfeit, h-help, p - properties");
                         }
                     }
                 }
@@ -133,20 +173,16 @@ public class Game {
                     }
                 }
             }
-
-
-
         }else{
             System.out.println("There is an error displaying console, file Game.java needs to be executed from command prompt.");
         }
     }
 
     private static boolean gameOver(int number_of_players, Player[] p) {
-        int flag = 0;
         for (int i = 0; i < number_of_players; i++){
             if (p[i].getBalance() < 0 && p[i].getDefeatStatus() == false){
                 // If we have 0 euros we can still play
-                System.out.println(":::::::::::   " + p[i].getName() + " has bankrupted " + p[i].getBalance() + " and is out of the game   :::::::::::");
+                System.out.println(":::::::::::   " + p[i].getName() + " has bankrupted and is out of the game   :::::::::::");
                 p[i].setDefeatStatus(true);
                 flag++;
                 if (flag >= number_of_players - 1){
