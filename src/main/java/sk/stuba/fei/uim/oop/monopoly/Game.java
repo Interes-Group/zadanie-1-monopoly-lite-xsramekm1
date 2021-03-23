@@ -17,7 +17,7 @@ public class Game {
         if (console == null){
             Square[] fields = Estates.generateEstates();
             System.out.println("<<<<<<<<<<<<<<<<MONOPOLY LITE>>>>>>>>>>>>>>>>");
-            System.out.println("version 1.0");
+            System.out.println("version 2.0");
             System.out.println("how many nolifers want to play this amazing java console game?");
             Scanner scan = new Scanner(System.in);
             int player_count = 0;
@@ -30,7 +30,7 @@ public class Game {
             if(player_count <= 1 || player_count > 10) {
                 System.out.println("neplatny pocet hracov");
             } else {
-                System.out.println("looserov je " + player_count);
+                //System.out.println("looserov je " + player_count);
                 Player[] players = new Player[player_count];
                 for (int i = 0; i < player_count; i++){
                     System.out.println("Player " + (i+1) + " choose your name:");
