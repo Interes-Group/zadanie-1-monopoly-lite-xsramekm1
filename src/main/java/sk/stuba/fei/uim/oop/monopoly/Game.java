@@ -12,7 +12,7 @@ public class Game {
 
     static int flag = 0;
 
-    public static void monopolyGame(){
+    public void monopolyGame(){
         Console console = System.console();
         if (console == null){
             Square[] fields = Estates.generateEstates();
@@ -142,13 +142,14 @@ public class Game {
                             case "f":
                                 //forfeit
                                 System.out.println("Are you sure you want to surrender? y/n");
-                                input_command = scan.nextLine();
-                                if (input_command == "y"){
-                                    players[j%player_count].setDefeatStatus(true);
+                                Scanner scanner = new Scanner(System.in);
+                                String input_command_2 = scanner.nextLine();
+                                if (input_command_2.equals("y")){
+                                    //players[j%player_count].setDefeatStatus(true);
+                                    players[j%player_count].setBalance(-1);
                                     flag++;
                                     System.out.println("Player " + players[j%player_count].getName() + " surrendered and is out of the game");
-                                }
-                                if (input_command == "n"){
+                                }else if (input_command_2.equals("n")){
                                     System.out.println("You didnt surrender");
                                 }
                                 continue;
@@ -162,7 +163,7 @@ public class Game {
                                 continue;
 
                         }
-                        if(input_command != "s" && input_command != "b" && input_command != "e" && input_command != "h" && input_command != "f"){
+                        if(input_command != "s" && input_command != "b" && input_command != "e" && input_command != "h" && input_command != "f"  && input_command != "p"){
                             System.out.println(input_command + " is not recognizable command. Available commands are: s - skip , b - buy, e - euro balance,f - forfeit, h-help, p - properties");
                         }
                     }
@@ -178,7 +179,7 @@ public class Game {
         }
     }
 
-    private static boolean gameOver(int number_of_players, Player[] p) {
+    private boolean gameOver(int number_of_players, Player[] p) {
         for (int i = 0; i < number_of_players; i++){
             if (p[i].getBalance() < 0 && p[i].getDefeatStatus() == false){
                 // If we have 0 euros we can still play
