@@ -12,14 +12,6 @@ public class Square {
     // ked nebolo pridelene default bol 0 (co je player cislo 1)
     int owner_id = 780;
 
-    //Police
-
-
-    //Chance
-
-
-    //Jail
-
 
     public void setId(int id) {
         this.id = id;
@@ -37,6 +29,7 @@ public class Square {
         this.name = name;
     }
 
+    //ESTATES
     public int getRetail_price() {
         return retail_price;
     }

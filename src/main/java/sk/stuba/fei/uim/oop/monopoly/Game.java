@@ -8,6 +8,12 @@ import static sk.stuba.fei.uim.oop.monopoly.Chance.chanceStep;
 import static sk.stuba.fei.uim.oop.monopoly.Dice.diceRoll;
 import static sk.stuba.fei.uim.oop.monopoly.Dice.prisonRoll;
 
+//Logika a kod su v anglictine ale nazvy nehnutelnosti su v slovenskom jazyku (cisto kvoli pridanej komedialnej hodnote :) )
+//Hra sa da prehrat, dva krat som odsimuloval hru dvoch hracov a v oboch pripadoch hra skoncila bankrotom jedneho z hracou
+//Hraci sa mozu taktiez vzdat
+//K hre prikladam do githubu obrazok s hracim planom ktory som pouzil pri navrhu ale dobre posluzi aj pri samotnej hra ako vizualizacia hracieho pola
+//P.S. pokial by tato verzia nebola plne funkcna vratte sa prosim na verziu 2.0 v predoslom commite, ta funguje na 100%. Dakujem
+
 public class Game {
 
     static int flag = 0;
@@ -17,20 +23,29 @@ public class Game {
         if (console == null){
             Square[] fields = Estates.generateEstates();
             System.out.println("<<<<<<<<<<<<<<<<MONOPOLY LITE>>>>>>>>>>>>>>>>");
-            System.out.println("version 2.0");
+            System.out.println("version 2.1");
             System.out.println("how many nolifers want to play this amazing java console game?");
             Scanner scan = new Scanner(System.in);
             int player_count = 0;
-            try {
-                player_count =  Integer.parseInt(scan.nextLine());
-            } catch (Exception e) {
-                System.out.println("Nezadal si integer ty mongol");
+            while(true) {
+                try {
+                    player_count = Integer.parseInt(scan.nextLine());
+                } catch (Exception e) {
+                    System.out.println("Number of players need to be integer");
+                    continue;
+                }
+                // player cannot play alone and more than 10 players is not reasonable for given board
+                try {
+                    if (player_count <= 1 || player_count > 10) {
+                        throw new InvalidInputException("Invalid player count. Enter number between 2 and 10");
+                    }
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+                break;
             }
-            // player cannot play alone and more than 10 players is not reasonable for given board
-            if(player_count <= 1 || player_count > 10) {
-                System.out.println("neplatny pocet hracov");
-            } else {
-                //System.out.println("looserov je " + player_count);
+            //System.out.println("looserov je " + player_count);
                 Player[] players = new Player[player_count];
                 for (int i = 0; i < player_count; i++){
                     System.out.println("Player " + (i+1) + " choose your name:");
@@ -173,7 +188,7 @@ public class Game {
                         System.out.println("<<<<<<<<<<<<<<< ♛ Koniec hry, vyhral " + players[i].getName() + " so zostatkom: " + players[i].getBalance() + " ♛ >>>>>>>>>>>>>>>");
                     }
                 }
-            }
+
         }else{
             System.out.println("There is an error displaying console, file Game.java needs to be executed from command prompt.");
         }
